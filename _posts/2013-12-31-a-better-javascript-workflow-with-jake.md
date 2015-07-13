@@ -3,14 +3,20 @@
 Jake is a javascript build tool that can dramatically improve your javascript development workflow. It helps you to easily maintain and automate the development tasks such as compiling sass files, typescript, coffeescript, etc, concatenate and minify source code, optimising images and validating your javascript code with JSHint.
 
 In this blog post we will use jake to speed up the front end development process. We will look breifely what jake can do, before jumping into real development walk through.
+
+
 ### Introduction
 Unlike [Grunt]("http://www.gruntjs.com", "Grunt") & [Gulp]("http://www.gulpjs.com", "Gulp"), jake is not a plugin based tool. You can create jake tasks with any valid javascript code.
+
+
 ###Setting up
 In order to start with the jake, you need to have nodejs installed on your machine. If you know nothing about node js, visit the [download]("http:// www.nodejs.com", "Node JS") page and grab the installer for your operating system.Once nodejs installed, run this command in your terminal to install the jake.
 ```
    npm install -g jake
 ```
 -g flag will install the jake glabally. To make sure jake has been installed properly, you can open the command line prompt and type  ``` jake --version ``` and it should output the current version of jake.
+
+
 ### The Jakefile
 Every jake project has a file, ```jakefile.js``` which defines workflow for jake to execute. Jakefile is just executable javascript. You can include whatever the javascript you want in it. A task can be defined using ```task``` function. It has one required argument, the task name, and three optional arguments.
 ``` 
@@ -51,6 +57,7 @@ To get started the real development process, simply clone the angular seed proje
 ``` 
 git clone https://github.com/angular/angular-seed.git
 ```
+
 #### Install dependencies
 We have two kinds of dependencies in this project tools and framework. Tools are the node JS packages help us to maintain and test our application. It can be installed via ```npm``` using command :
 
