@@ -236,8 +236,61 @@ You can read more details about wiredep library [here](https://github.com/taptap
 
 
 #### Watch the filesystem for changes
-####Minify HTML files with htmlmin
+#### Minify HTML files with htmlmin
+Next we need to compress our html files using htmlmin a simple html 
+minifier.
+```
+npm install --save-dev htmlmin
+```
+Our jake like following:
+
+``` javascript
+	var htmlmin = require('htmlmin');
+	....
+	task('htmlmin', function() {
+		console.log('Minifiying html files....');
+		
+		var files = new jake.FileList();
+		files.include(build + '/*.html');
+		
+		files.toArray().forEach(function(f) {
+			var content = jetpack.read(f);
+			jetpack.write(f, htmlmin(content, {
+				cssmin: true,
+				jsMin: true
+			}));
+		});
+		
+	});
+	
+```
+
+We reads each html file in build dir using jetpack and built in 
+jake FileList api. Then we use htmlmin module compress the html 
+files. cssMin property says that minify inline css and jsmin says
+that minify the inline script. 
+
 #### Minify the css files with CssMin
+Cssmin is the simple node.js module that minifies the css files.
+``` npm install --save-dev cssmin ```
+jake task
+
+``` javascript 
+	var cssmin = require('cssmin');
+	//...
+	task('htmlmin', function() {
+		console.log('Minifiying html files....');
+		
+		var files = new jake.FileList();
+		files.include(dist + '/app.css');
+		
+		files.toArray().forEach(function(f) {
+			var content = jetpack.read(f);
+			jetpack.write(f, cssmin(content));
+		});
+		
+	});
+```
 #### Implement the live reload
 #### Wrapping up
 #### Summary
