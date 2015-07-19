@@ -173,10 +173,55 @@ task('copy', function (env) {
 The copy task will do two tasks. Copy code and assets from source to build and from build to distribution folder. You need to pass the parameter env='list' in order to copy to list folder.
 
 ####Validating code with JSHint
+
 #### Concatenating the Source file 
+
+``` javascript
+	
+	var bowerPlaceholder = /<!---->/gi;
+	var appJsPlaceholder = /<!---->/gi;
+	var appCssPlaceholder = /<!---->/gi;
+
+	function getPlaceholderScripts(placeholderRegex) {
+		
+	}
+	
+	task('concat', function() {
+		
+	});
+
+```
+
 #### Minifying the source files
+We use Uglify JS 2 for compressing and minifying our javascript code. install node.js 
+module using npm.
+
+``` npm install --save-dev uglify-js ```
+
+ Uglify js is providing commandline utility to minify the source files. But we want to use its code api.
+
+``` javascript
+	var uglifyjs = require('uglify-js');
+	//....
+	task('minify-scripts', function(){
+		var scripts = [
+			dist + '/scripts/app.js',
+			dist + '/scripts/vendor.js'
+		];
+		scripts.forEach(function(file) {
+			console.log('Minifying ' + file);
+			var result  = uglifyjs.minify(file);
+			jetpack.write(file, result.code);
+		});	 
+	});
+	 
+```
+
+
 #### Compiling the less files
+
 #### Configuring the Staging Server
+
 ####Wiredep the  bower dependencies
 Wiredep is the node module used to wire the bower dependencies to your source code.  
 
