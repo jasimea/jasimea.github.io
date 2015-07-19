@@ -178,17 +178,35 @@ The copy task will do two tasks. Copy code and assets from source to build and f
 
 ``` javascript
 	
-	var bowerPlaceholder = /<!---->/gi;
-	var appJsPlaceholder = /<!---->/gi;
-	var appCssPlaceholder = /<!---->/gi;
-
-	function getPlaceholderScripts(placeholderRegex) {
-		
-	}
 	
-	task('concat', function() {
-		
-	});
+var bowerDependenciesRegEx = /(([ \t]*)<!--\s*bower:js\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi;
+var appDependenciesRegEx = /(([ \t]*)<!--\s*app:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endapp\s*-->)/gi
+
+task('concat', function() { 
+	var htmlContent = fs.readFileSync('app/index.html');
+	
+	jetpack.append('app/vendor.min.js', concatScriptDependecies(htmlContent.toString(), bowerDependenciesRegEx));	
+    jetpack.append('app/app.min.js', concatScriptDependecies(htmlContent.toString(), appDependenciesRegEx)); 	
+
+	htmlContent = htmlContent.toString().replace(bowerDependenciesRegEx, '<script src="vendor.min.js"></script>');
+	htmlContent = htmlContent.toString().replace(appDependenciesRegEx, '<script src="app.min.js"></script>');
+	
+	jetpack.write('app/app.build.html', htmlContent);
+});
+
+function concatScriptDependecies(content, regEx) {
+    
+    var regexMatch = content.toString().match(regEx);
+    var concat = "";
+    
+    var scriptTags = regexMatch.join('').toString().match(/<script.*src=['"]([^'"]+)/gi);
+    scriptTags.forEach(function(tag) {
+        var path = tag.toString().match(/src\s*=\s*['"]([^"']+)/)[1];
+        concat += jetpack.cwd('app').read(path);
+    });
+    
+    return concat;
+}
 
 ```
 
