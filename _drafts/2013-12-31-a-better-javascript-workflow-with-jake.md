@@ -174,6 +174,36 @@ The copy task will do two tasks. Copy code and assets from source to build and f
 
 ####Validating code with JSHint
 
+``` javascript
+task('jshint', function () {
+    var options = {
+        bitwise: true,
+        curly: false,
+        eqeqeq: true,
+        forin: true,
+        immed: true,
+        latedef: false,
+        newcap: true,
+        noarg: true,
+        noempty: true,
+        nonew: true,
+        regexp: true,
+        undef: true,
+        strict: true,
+        globalstrict: true,
+        trailing: true
+    };
+
+    process.stdout.write('Linting javascript code...');
+
+    var files = jetpack.find('app', { matching: ['*.js', '!**/*_spec.js'] }).forEach(function (f) {
+        var content = fs.readFileSync(f);
+        var pass = jshint(content, options, options);
+        console.log(jshint.errors);
+    });
+}, { async: true });
+```
+
 #### Concatenating the Source file 
 
 ``` javascript
@@ -238,8 +268,28 @@ module using npm.
 
 #### Compiling the less files
 
-#### Configuring the Staging Server
+``` javascript
+	task('less', function () {
+    var lessfile = jetpack.read('app/styles/test.less');
 
+    less.render(lessfile)
+    .then(function (output) {
+        jetpack.file('.tmp/dist/styles/test.css', { content: output.css });
+    },
+    function (error) {
+        console.log(error.toString())
+    });
+
+});
+```
+
+#### Configuring the Staging Server
+``` javascript
+task('server', ['copy'], function () {
+    connect().use(serveStatic('.tmp/dist')).listen(8080);
+    console.log('Listening on port 80.');
+});
+```
 ####Wiredep the  bower dependencies
 Wiredep is the node module used to wire the bower dependencies to your source code.  
 
@@ -354,6 +404,20 @@ jake task
 		
 	});
 ```
+#### Optimize images
+``` javascript
+task('imagemin', function () {
+    new Imagemin()
+        .src('images/*.{gif,jpg,png,svg}')
+        .dest('build/images')
+        .use(Imagemin.jpegtran({ progressive: true }))
+    .run(function (err, files) {
+        console.log(files[0]);
+        // => {path: 'build/images/foo.jpg', contents: <Buffer 89 50 4e ...>} 
+    });
+});
+```
+
 #### Implement the live reload
 #### Wrapping up
 #### Summary
