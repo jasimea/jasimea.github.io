@@ -63,12 +63,15 @@ jake [task][params]
 ```
 For example, you can run the parameterized task like ``` jake taskWithParam [paramValue1,paramValue2]```. If you do not specify the task name, then the default task will be executed.
 
+
 ### Setting up project.
 To get started the real development process, simply clone the angular seed project into your local system. Angular-Seed is an application skeleton for typical angular js web app. Clone the angular seed applicatio  using git:
 
 ``` 
 git clone https://github.com/angular/angular-seed.git
 ```
+
+
 #### Install dependencies
 We have two kinds of dependencies in this project tools and framework. Tools are the node JS packages help us to maintain and test our application. It can be installed via ```npm``` using command :
 
