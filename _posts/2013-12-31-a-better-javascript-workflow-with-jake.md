@@ -18,7 +18,7 @@ The ```name``` argument is a string with the name of the task. And ```prerequisi
 
 You can use ```desc(str)``` to add a description for task.
 
-``` javascript
+{% highlight ruby %}
     desc('This is the default task');
     task('default', function() {
         console.log('Jake is up and running...');
@@ -36,7 +36,8 @@ You can use ```desc(str)``` to add a description for task.
         }, 10000);
     });
     
-```
+{% endhighlight %}
+
 You can run these task like:
 ``` javascript 
 jake [task][params]
