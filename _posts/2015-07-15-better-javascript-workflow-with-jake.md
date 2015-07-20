@@ -19,9 +19,9 @@ In this blog post we will use jake to speed up the front end development process
 
 ###Setting up
 In order to start with the jake, you need to have nodejs installed on your machine. If you know nothing about node js, visit the [download]("http:// www.nodejs.com", "Node JS") page and grab the installer for your operating system.Once nodejs installed, run this command in your terminal to install the jake.
-```
+{% highlight javascript %} 
    npm install -g jake
-```
+{% endhighlight %}
 -g flag will install the jake glabally. To make sure jake has been installed properly, you can open the command line prompt and type  ``` jake --version ``` and it should output the current version of jake.
 
 
