@@ -1,6 +1,20 @@
-Jake is a javascript build tool that can dramatically improve your javascript development workflow. It helps you to easily maintain and automate the development tasks such as compiling sass files, typescript, coffeescript, etc, concatenate and minify source code, optimising images and validating your javascript code with JSHint.
+---
+layout: post
+title: Syntax Highlighting Post
+description: "Demo post displaying the various ways of highlighting code in Markdown."
+modified: 2015-07-23
+tags: [sample post, code, highlighting]
+image:
+  feature: abstract-10.jpg
+  credit: dargadgetz
+  creditlink: http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/
+---
 
+Jake is a javascript build tool that can dramatically improve your javascript development workflow. It helps you to easily maintain and automate the development 
+tasks such as compiling sass files, typescript, coffeescript, etc, concatenate and minify source code, optimising images and validating your javascript code with JSHint.
 In this blog post we will use jake to speed up the front end development process. We will look breifely what jake can do, before jumping into real development walk through.
+
+
 ### Introduction
 Unlike [Grunt]("http://www.gruntjs.com", "Grunt") & [Gulp]("http://www.gulpjs.com", "Gulp"), jake is not a plugin based tool. You can create jake tasks with any valid javascript code.
 ###Setting up
@@ -21,7 +35,7 @@ The ```name``` argument is a string with the name of the task. And ```prerequisi
 You can use ```desc(str)``` to add a description for task.
 
 {% highlight javascript %}
-```   
+   
 	desc('This is the default task');
     task('default', function() {
         console.log('Jake is up and running...');
@@ -38,7 +52,7 @@ You can use ```desc(str)``` to add a description for task.
             complete();
         }, 10000);
     });
- ```   
+ 
 {% endhighlight %}
 
 You can run these task like:
