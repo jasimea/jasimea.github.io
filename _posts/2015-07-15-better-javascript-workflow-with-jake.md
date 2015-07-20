@@ -14,7 +14,7 @@ Every jake project has a file, ```jakefile.js``` which defines workflow for jake
 
 {% highlight javascript %} 
 	task(name, [prerequirities], [action], opts);
-{% highlight javascript %}
+{% endhighlight %}
 
 The ```name``` argument is a string with the name of the task. And ```prerequisites``` is the optional array of the list of prerequisite to perform first. The ```action``` is a function defining the action to be executed for task. The ```opts``` is the normal javascript object for specifying any additional configurations to  the task. If you want to make the jake task asynchronous, set the async property to true and you task must call ```complete()``` to notify the jake that the task is done, and execution can proceed. By default ```async``` property is ```false```.
 
