@@ -70,7 +70,7 @@ For example, the ```test``` task from above code sample can be executed as:
 	jake test[paramValue]
 {% endhighlight %}
 
-If you do not specify the task name, then the default task will be executed.
+If you do not specify a task name, then the default task will be executed.
 
 ### Setting up project.
 To get started the real development process, simply clone the angular seed project into your local system. Angular-Seed is an application skeleton for typical angular js web app. Clone the angular seed applicatio  using git:
