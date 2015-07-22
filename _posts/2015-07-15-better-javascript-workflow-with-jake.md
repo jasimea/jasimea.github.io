@@ -49,7 +49,8 @@ You can use ```desc(str)``` to add a description for task.
     });
     
     desc('This is an example of asyncronous task');
-    task('test', { async: true }, function() {
+    task('test', { async: true }, function(param) {
+		console.log(' You have passed ' + param);
         setTimeout(function() {
             complete();
         }, 10000);
@@ -57,12 +58,19 @@ You can use ```desc(str)``` to add a description for task.
  
 {% endhighlight %}
 
-You can run these task like:
-``` javascript 
-jake [task][params]
-```
-For example, you can run the parameterized task like ``` jake taskWithParam [paramValue1,paramValue2]```. If you do not specify the task name, then the default task will be executed.
+A Jake task can be executed as following:
 
+{% highlight javascript %}
+	jake [task][params]
+{% endhighlight %}
+
+For example, the ```test``` task from above code sample can be executed as:
+
+{% highlight javascript %}
+	jake test[paramValue]
+{% endhighlight %}
+
+If you do not specify the task name, then the default task will be executed.
 
 ### Setting up project.
 To get started the real development process, simply clone the angular seed project into your local system. Angular-Seed is an application skeleton for typical angular js web app. Clone the angular seed applicatio  using git:
@@ -89,6 +97,7 @@ You should find two new folders in your project:
  - node_modules - contains the npm packages for the tools we need.
  - app/bower_components -  contains front end libraries like angular and jQuery.
 
+
 ### Automating the process
 
 *Regular javascript workflow - expand this part*
@@ -108,6 +117,7 @@ You should find two new folders in your project:
 10.	Watch the application for changes and do all the above steps whenever we change the system
 11.	deploy the staging and production version to azure web services / amazon a3
 12.	automatically change the version number and tag production releases in my git repository. 
+
 
 ### Jake In Action
 Next you need to create a file called ```Jakefile.js``` .  This is where you will define and configure the tasks that you want jake to run. So our initial Jakefile will be like following:
@@ -141,6 +151,8 @@ Next import the configuration in your jakefile.
 ```
  var jakeConfig = require('./jakefile.config.js');
 ```
+
+
 
 #### Clean previous build
 The clean task will remove the build artifacts from previous build. we use the ```jake.rmRf``` utility which recursively removes a directory and all its content.
