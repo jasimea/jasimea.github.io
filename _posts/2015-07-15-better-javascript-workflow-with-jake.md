@@ -73,11 +73,13 @@ For example, the ```test``` task from above code sample can be executed as:
 If you do not specify a task name, then the default task will be executed.
 
 ### Setting up project.
-To get started the real development process, simply clone the angular seed project into your local system. Angular-Seed is an application skeleton for typical angular js web app. Clone the angular seed applicatio  using git:
 
-``` 
-git clone https://github.com/angular/angular-seed.git
-```
+Let's kickstart our app with angular-seed project. I recommend the angular-seed as it provides a great skeleton for bootstrapping. It also contains bunch of development and testing tools. To get started simple clone the angular-seed repository and install the dependencies.
+
+{% highlight javascripr %}
+	git clone https://github.com/angular/angular-seed.git
+{% endhighlight %}
+
 
 
 #### Install dependencies
