@@ -80,6 +80,8 @@ Let's kickstart our app with angular-seed project. I recommend the angular-seed 
 	git clone https://github.com/angular/angular-seed.git
 {% endhighlight %}
 
+We have two types of dependecies in this project angular framework code and tools which helps to manage and test the application code. Tools can be downloaded via node package manager using the command ``` npm install ```.And angular framework code can be downloaded via ```bower``` using  the command: ``` bower install  ```. 
+
 
 
 #### Install dependencies
