@@ -76,7 +76,7 @@ If you do not specify a task name, then the default task will be executed.
 
 Let's kickstart our app with angular-seed project. I recommend the angular-seed as it provides a great skeleton for bootstrapping. It also contains bunch of development and testing tools. To get started simple clone the angular-seed repository and install the dependencies.
 
-{% highlight javascripr %}
+{% highlight javascript %}
 	git clone https://github.com/angular/angular-seed.git
 {% endhighlight %}
 
@@ -86,8 +86,8 @@ We have two types of dependecies in this project angular framework code and tool
 
 After installing dependencies, you should find two new folders in your project.
 	
-- ```node_modules``` - npm packages for tools
-- ```app\bower_components ```  - angular js framework files.
+-  ```node_modules``` - npm packages for tools
+-  ```app\bower_components ```  - angular js framework files.
 
 
 #### Install dependencies
