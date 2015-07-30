@@ -2,6 +2,7 @@
 
 layout: post
 title: Better JavaScript Workflow With Jake
+comments: true
 description: ""
 modified: 2015-07-24
 tags: [javascript, jake, nodejs, build automation]
