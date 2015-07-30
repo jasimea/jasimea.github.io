@@ -37,8 +37,8 @@ image:
   <div class="entry-content">
     {{ post.content }}
   </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-{% if page.comments %}
+  <div>
+  {% if page.comments %}
    /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -48,6 +48,8 @@ image:
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 {% endif %}
+  </div>
+</article><!-- /.hentry -->
 {% endfor %}
 
 <div class="pagination">
