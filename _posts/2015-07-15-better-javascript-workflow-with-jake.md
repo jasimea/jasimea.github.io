@@ -91,27 +91,6 @@ After installing dependencies, you should find two new folders in your project.
 
 Angular-seed is preconfigured with simple webserver. And you can run the application with ```npm start ``` command. But it does not contain automated build system like Jake. 
 
-### Automating the process
-
-*Regular javascript workflow - expand this part*
-
-*use compress & minify*
-
-1.	We need to clean the content of build directory before initiating new build.
-2.	We need to compile our less files to standard css files.
-3.	We need to validate the JavaScript code against best practices using JSHint.
-4.	We need to minify and compress the images.
-5.	We need to concatenate & compress all the javascript source code into single file.
-6.	Concatenate and minify all the compiled css files into a single file.
-7.	minify and optimize the html files
-8.	Create a staging http server
-9.	livereload 
-10.	test the application 
-10.	Watch the application for changes and do all the above steps whenever we change the system
-11.	deploy the staging and production version to azure web services / amazon a3
-12.	automatically change the version number and tag production releases in my git repository. 
-
-
 ### Jake In Action
 Next you need to create a file called ```Jakefile.js``` .  This is where you will define and configure the tasks that you want jake to run. So our initial Jakefile will be like following:
 ``` javascript
