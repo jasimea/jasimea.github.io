@@ -89,24 +89,7 @@ After installing dependencies, you should find two new folders in your project.
 -  ```node_modules``` - npm packages for tools
 -  ```app\bower_components ```  - angular js framework files.
 
-
-#### Install dependencies
-We have two kinds of dependencies in this project tools and framework. Tools are the node JS packages help us to maintain and test our application. It can be installed via ```npm``` using command :
-
-``` 
-npm install
-```
-When you issue this command, the npm utility will grab the dependencies listed in your package.json from the central npm repository.  Similarly you can install the client side framework dependencies with bower package manager using command:
-```
-bower install
-```
-Similar to npm, bower is a package management tool for client side libraries and assets. It keeps track of these packages in a manifest file, ``` bower.json```. You can visit bower.io to get more details about it.
-
-You should find two new folders in your project:
-
- - node_modules - contains the npm packages for the tools we need.
- - app/bower_components -  contains front end libraries like angular and jQuery.
-
+Angular-seed is preconfigured with simple webserver. And you can run the application with ```npm start ``` command. But it does not contain automated build system like Jake. 
 
 ### Automating the process
 
