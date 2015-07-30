@@ -39,7 +39,10 @@ image:
   </div><!-- /.entry-content -->
   <div>
   {% if page.comments %}
+  <div id="disqus_thread"></div>
   <script type="text/javascript">
+  var disqus_shortname = 'jasimea'; // required: replace example with your forum shortname
+  var disqus_identifier = "{{ site.disqusid }}{{ page.url | replace:'index.html','' }}";
    /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
