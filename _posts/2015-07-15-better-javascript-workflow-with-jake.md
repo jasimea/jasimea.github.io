@@ -93,14 +93,13 @@ Angular-seed is preconfigured with simple webserver. And you can run the applica
 
 ### Jake In Action
 Next you need to create a file called ```Jakefile.js``` .  This is where you will define and configure the tasks that you want jake to run. So our initial Jakefile will be like following:
-``` javascript
-var jake= require('jake');
-
-desc('default jake task');
-task('default', [], function() {
-	console.log('Finished Building');
-});
-```
+{% highlight javascript %}
+	var jake= require('jake');
+	desc('default jake task');
+	task('default', [], function() {
+		console.log('Finished Building');
+	});
+{% endhighlight %}
 
 It's always a good practice to keep the build configuration separate from actual build file. Create a file called ```Jakefile.config.js``` .
 
