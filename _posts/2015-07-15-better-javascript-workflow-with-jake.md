@@ -107,12 +107,14 @@ It's always a good practice to keep the build configuration separate from actual
 
 {% highlight javascript %}
 	var Config = (function() {
+		
 		function JakeConfig() {
 			this.source = 'app';
 			this.build = 'build';
 			this.dist = 'dist';
 		}
 		return Config;
+		
 	})();
 	
 	module.exports = new Config();
