@@ -142,7 +142,7 @@ This will remove the contents of ```build/``` directory and ```dist/``` director
 
 ####Validating code with JSHint 
 
-[JSHint] http://jshint.com/ "JSHint" is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
+[JSHint] [http://jshint.com/] is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
 directly we  use ```simplebuild-jshin```, library that provides a simple interface to JSHint. Its convenient to use automation tools such as Grunt, Gulp or Jake.
 
 #### Copy assets
