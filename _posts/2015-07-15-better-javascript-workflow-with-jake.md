@@ -140,7 +140,7 @@ task('clean', function() {
 
 This will remove the contents of ```build/``` directory and ```dist/``` directory.
 
-####Validating code with JSHint
+####Validating code with JSHint 
 
 #### Copy assets
 After cleaning the project we need to copy the actual code & assets into the build directory. Node's built in file system api is too low level and too painful to use. So we will use the ```fs-jetpack``` api built on top of native file system API.  Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
