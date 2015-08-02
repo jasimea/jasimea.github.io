@@ -127,17 +127,19 @@ Jakefile.config.js contains a singleton module which contains list of variables 
 {% endhighlight %}
 
 #### Clean previous build
-The clean task will remove the build artifacts from previous build. we use the ```jake.rmRf``` utility which recursively removes a directory and all its content.
+We need to clean/remove the build artifacts from previous build. ```jake.rmRf()``` is the  utility method which recursively remove the directories and all its content.
 
-``` javascript
+{% highlight javascript %}
 desc('clean previous build  files');
 task('clean', function() {
 	console.log('cleaning the project....');
-	jake.rmRf(jakeUtil.dist); // directory defined in the config file
-	jake.rmRf(jakeUtil.build);
+	jake.rmRf(jakeConfig.dist); // directory defined in the config file
+	jake.rmRf(jakeConfig.build);
 });
-```
-This will remove the ```generated/build``` and ```generated/dist``` directories and all its content.
+{% endhighlight %}
+
+This will remove the contents of ```build/``` directory and ```dist/``` directory.
+
 #### Copy assets
 After cleaning the project we need to copy the actual code & assets into the build directory. Node's built in file system api is too low level and too painful to use. So we will use the ```fs-jetpack``` api built on top of native file system API.  Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
 
