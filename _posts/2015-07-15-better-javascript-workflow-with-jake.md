@@ -120,7 +120,7 @@ It's always a good practice to keep the build configuration separate from actual
 	module.exports = new Config();
 {% endhighlight %}
 
-Jakefile.config.js contains singleton module which contains list of variables like path, jshint options, etc. Import the configuration module int your jake file.
+Jakefile.config.js contains a singleton module which contains list of variables like path, jshint options, etc. Import the configuration module int your jake file.
 
 {% highlight javascript %}
  	var jakeConfig = require('./jakefile.config.js');
