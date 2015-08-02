@@ -93,7 +93,8 @@ After installing dependencies, you should find two new folders in your project.
 Angular-seed is preconfigured with simple webserver. And you can run the application with ```npm start ``` command. But it does not contain automated build system like Jake. 
 
 ### Jake In Action
-Next you need to create a file called ```Jakefile.js``` .  This is where you will define and configure the tasks that you want jake to run. So our initial Jakefile will be like following:
+
+Create a file called ```Jakefile.js``` in your project root directory. This is where you will define and configure tasks that you want jake to run. 
 {% highlight javascript %}
 	var jake= require('jake');
 	desc('default jake task');
@@ -104,27 +105,26 @@ Next you need to create a file called ```Jakefile.js``` .  This is where you wil
 
 It's always a good practice to keep the build configuration separate from actual build file. Create a file called ```Jakefile.config.js``` .
 
-``` javascript 
-var Config = (function() {
-	function JakeConfig() {
-		this.source = 'app';
-		this.build = 'generated/build';
-		this.dist = 'generated/dist';
-	}
-	return Config;
-})();
+{% highlight javascript %}
+	var Config = (function() {
+		function JakeConfig() {
+			this.source = 'app';
+			this.build = 'build';
+			this.dist = 'dist';
+		}
+		return Config;
+	})();
+	
+	module.exports = new Config();
+{% endhighlight %}
 
-module.exports = new Config();
-```
-```configuration```  is a simple singleton module which contains list of properties like path, jshint options, etc. In this code source, build and dist are the path to the corresponding folders from current directory.
+```configuration```  is a simple singleton module which contains list of properties like path, jshint options, etc. In the above, build and dist are the path to the corresponding folders from current directory.
 
-Next import the configuration in your jakefile.
+Next you need to import the configuration in to your jakefile like following.
 
-```
- var jakeConfig = require('./jakefile.config.js');
-```
-
-
+{% highlight javascript %}
+ 	var jakeConfig = require('./jakefile.config.js');
+{% endhighlight %}
 
 #### Clean previous build
 The clean task will remove the build artifacts from previous build. we use the ```jake.rmRf``` utility which recursively removes a directory and all its content.
