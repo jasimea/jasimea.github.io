@@ -120,9 +120,7 @@ It's always a good practice to keep the build configuration separate from actual
 	module.exports = new Config();
 {% endhighlight %}
 
-```configuration```  is a simple singleton module which contains list of properties like path, jshint options, etc. In the above, build and dist are the path to the corresponding folders from current directory.
-
-Next you need to import the configuration in to your jakefile like following.
+Jakefile.config.js contains singleton module which contains list of variables like path, jshint options, etc. Import the configuration module int your jake file.
 
 {% highlight javascript %}
  	var jakeConfig = require('./jakefile.config.js');
