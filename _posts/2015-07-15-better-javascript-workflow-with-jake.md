@@ -148,7 +148,7 @@ Install JSHint and simplebuild-jshint npm modules using ```npm install``` comman
 
 {% highlight javascript %}
 	npm install -g jshint
-	npm install --save-dev simplebuild-jshin
+	npm install --save-dev simplebuild-jshint
 {% endhighlight %}
 
 We need to validate source javascripts with JSHint, also we need to exclude the bower dependencies from validation.
