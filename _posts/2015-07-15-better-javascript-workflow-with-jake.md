@@ -142,6 +142,9 @@ This will remove the contents of ```build/``` directory and ```dist/``` director
 
 ####Validating code with JSHint 
 
+[JSHint] http://jshint.com/ "JSHint" is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
+directly we  use ```simplebuild-jshin```, library that provides a simple interface to JSHint. Its convenient to use automation tools such as Grunt, Gulp or Jake.
+
 #### Copy assets
 After cleaning the project we need to copy the actual code & assets into the build directory. Node's built in file system api is too low level and too painful to use. So we will use the ```fs-jetpack``` api built on top of native file system API.  Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
 
