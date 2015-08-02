@@ -140,10 +140,54 @@ task('clean', function() {
 
 This will remove the contents of ```build/``` directory and ```dist/``` directory.
 
-####Validating code with JSHint 
+#### Linting JavaScript code with JSHint 
+Linting is the process of analysing code for potential errors whith the use of programs. [JSHint](http://jshint.com/) is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
+directly we  use ```simplebuild-jshint```, library that provides a simple interface to JSHint. Its convenient to use automation tools such as Grunt, Gulp or Jake.
 
-[JSHint](http://jshint.com/) is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
-directly we  use ```simplebuild-jshin```, library that provides a simple interface to JSHint. Its convenient to use automation tools such as Grunt, Gulp or Jake.
+Install JSHint and simplebuild-jshint npm modules using ```npm install``` commands as following
+
+{% highlight javascript %}
+	npm install -g jshint
+	npm install --save-dev simplebuild-jshin
+{% endhighlight %}
+
+We need to validate source javascripts with JSHint, also we need to exclude the bower dependencies from validation.
+
+##### JSHint Options
+JSHint was designed to be very configurable. These configuration options can be found [here](http://jshint.com/docs/options/). Define the JSHint rules in 
+jakeConfig file like following:
+
+{% highlight javascript %}
+	this.jsHintOptions = {
+		curly: true,
+		camelCase: true,
+		window: false,
+		document: false,
+		setTimeout: false,
+		quotmark: 'single'
+	};
+{% endhighlight %} 
+
+Our lint task is as follows:
+
+{% highlight javascript %}
+	var jshint = require("simplebuild-jshint");
+
+	jshint.checkFiles({
+    	files: [ 
+			"app/*.js", 
+			"app/**/*.js", 
+			'!app/bower_components/**/*.js'
+		],
+    	options: jakeConfig.jsHintOptions
+	}, function() {
+	    console.log("Lint succeeded");
+	}, function(message) {
+	    console.log(message);
+	});
+{% endhighlight %}
+
+Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
 
 #### Copy assets
 After cleaning the project we need to copy the actual code & assets into the build directory. Node's built in file system api is too low level and too painful to use. So we will use the ```fs-jetpack``` api built on top of native file system API.  Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
