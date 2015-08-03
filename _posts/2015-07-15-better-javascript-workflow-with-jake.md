@@ -189,6 +189,68 @@ Our lint task is as follows:
 
 Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
 
+### Wiredep the  bower dependencies
+
+**After bower packages has been installed**, you could add them manually to your application's HTML file. To avoid this manual intervention, you can use wiredep
+to automate this process. Wiredep enables you to wire Bower dependencies into your source code.
+
+
+Install module with npm.
+{% highlight javascript %}
+	 npm install wiredep --save-dev
+{% endhighlight %}
+
+Edit app/app.html and add placeholders for use by wiredep, as shown below:
+{% highlight html %}
+<html>
+	<head>
+		<!-- bower:css -->
+		<!-- endbower -->
+		</head>
+		<body>
+		<!-- bower:js -->
+		<!-- endbower -->
+	</body>
+</html>
+{% endhighlight %}
+
+Create the jake task as follows:
+
+{% highlight javascript %} 
+var wiredep = require('wiredep');
+
+task('wiredep',  function() {
+	wiredep({
+		src: 'app/app.html',
+		bowerJson: require('./bower.json'),
+		directory: './bower_components'
+	});		
+});
+{% endhighlight %}
+
+#### How it works?
+ Wiredep reads the dependencies array from your bower.json file, then reads the bower.json from each dependencies folder in your 
+ bower_components folder. Based on these connection, it determines the order of scripts must be included before injecting them 
+ between the placeholders in your source code.
+
+If one of your dependencies does not have main in its bower.json, then you may want to override the default behaviour in your bower.son file like following:
+
+{% highlight javascript %}
+{
+	....
+	"dependencies": {
+		"package-without-main" : "0.0"
+	},
+	"overrides": {
+		"package-without-main" : { 
+			"main" : "package-main.js"
+		}
+	}
+}
+{% endhighlight %}
+
+You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
+
 ### Copy assets to build folder
 	
  Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
@@ -233,69 +295,6 @@ task('copy', function (env) {
 The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
 test files and less files.
 
-### Wiredep the  bower dependencies
-Wiredep is the node module used to wire the bower dependencies to your source code.  
-
-Install module with npm.
-{% highlight javascript %}
-	 npm install wiredep --save-dev
-{% endhighlight %}
-
-
-{% highlight javascript %}
-Install your bower dependencies
-``` bower install jquery --save ```
-{% endhighlight %}
-
-Insert a placeholder in your app.html where your dependencies will be injected
-{% highlight html %}
-	<html>
-		<head>
-			 <!-- bower:css -->
-			 <!-- endbower -->
-		</head>
-		<body>
-			<!-- bower:js -->
-			<!-- endbower -->
-		</body>
-	</html>
-{% endhighlight %}
-
-Create the jake task as follows:
-
-{% highlight javascript %} 
-var wiredep = require('wiredep');
-//....
-task('wiredep',  function() {
-	wiredep({
-		src: 'src/app.html',
-		bowerJson: require('./bower.json'),
-		directory: './bower_components'
-	});		
-});
-{% endhighlight %}
-##### How it works?
- Wiredep reads the dependencies array from your bower.json file, then reads the bower.json from each dependencies folder in your 
- bower_components folder. Based on these connection, it determines the order of scripts must be included before injecting them 
- between the placeholders in your source code.
-
-If one of your dependencies does not have main in its bower.json, then you may want to override the default behaviour in your bower.son file like following:
-
-{% highlight javascript %}
-{
-	....
-	"dependencies": {
-		"package-without-main" : "0.0"
-	},
-	"overrides": {
-		"package-without-main" : { 
-			"main" : "package-main.js"
-		}
-	}
-}
-{% endhighlight %}
-
-You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
 
 ### Concatenating the Source file 
 
