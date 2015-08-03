@@ -209,19 +209,19 @@ task('copy', function (env) {
 	var source = jakeConfig.source,
 		dest = jakeConfig.build,
 		filesToInclude = [
-			 source + '/**/*.html',
-			 source + '/**/*.js',
-			 source + '/**/*.css',
-			 source + '/assets/images/**/*',
-			 '!' + source + '/**/*_test.js',
-			 '!'+ source + '/**/*.less'
+			 'app/**/*.html',
+			 'app/**/*.js',
+			 'app/**/*.css',
+			 'app/assets/images/**/*',
+			 '!app/**/*_test.js',
+			 '!app/**/*.less'
 		];
 	if(env == 'dist') {
 		source = jakeConfig.build;
 		dest = jakeConfig.dist;
 		filesToInclude = [
-			source + '/assets/*',
-			source + '/**/*.html',
+			'build/assets/*',
+			'build/**/*.html',
 			'*.!(css|js)'
 		];
 	}
@@ -230,24 +230,25 @@ task('copy', function (env) {
 	});
 });
 {% endhighlight %}
-The copy task will do two tasks. Copy code and assets from source to build and from build to distribution folder. You need to pass the parameter env='list' in order to copy to list folder.
+The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
+test files and less files.
 
-
-#### Concatenating the Source file 
-#### Minifying the source files
-#### Compiling the less files
-#### Configuring the Staging Server
 ####Wiredep the  bower dependencies
 Wiredep is the node module used to wire the bower dependencies to your source code.  
 
 Install module with npm.
-``` npm install wiredep --save-dev ```
+{ %highlight javascript %}
+	 npm install wiredep --save-dev
+{% endhighlight %}
 
+
+{ %highlight javascript %}
 Install your bower dependencies
 ``` bower install jquery --save ```
+{% endhighlight %}
 
 Insert a placeholder in your app.html where your dependencies will be injected
-``` html
+{ %highlight html %}
 	<html>
 		<head>
 			 <!-- bower:css -->
@@ -258,9 +259,11 @@ Insert a placeholder in your app.html where your dependencies will be injected
 			<!-- endbower -->
 		</body>
 	</html>
-``` 
+{ % endhighlight %}
+
 Create the jake task as follows:
-``` javascript 
+
+{% highlight javascript %} 
 var wiredep = require('wiredep');
 //....
 task('wiredep',  function() {
@@ -270,7 +273,7 @@ task('wiredep',  function() {
 		directory: './bower_components'
 	});		
 });
-```
+{% endhighlight %}
 ##### How it works?
  Wiredep reads the dependencies array from your bower.json file, then reads the bower.json from each dependencies folder in your 
  bower_components folder. Based on these connection, it determines the order of scripts must be included before injecting them 
@@ -278,7 +281,7 @@ task('wiredep',  function() {
 
 If one of your dependencies does not have main in its bower.json, then you may want to override the default behaviour in your bower.son file like following:
 
-``` javascript
+{% highlight javascript %}
 {
 	....
 	"dependencies": {
@@ -290,13 +293,16 @@ If one of your dependencies does not have main in its bower.json, then you may w
 		}
 	}
 }
-```
+{% endhighlight %}
 
 You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
 
-
+#### Concatenating the Source file 
+#### Minifying the source files
+#### Compiling the less files
+#### Configuring the Staging Server
 #### Watch the filesystem for changes
-####Minify HTML files with htmlmin
+#### Minify HTML files with htmlmin
 #### Minify the css files with CssMin
 #### Implement the live reload
 #### Wrapping up
