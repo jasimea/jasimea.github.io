@@ -192,8 +192,7 @@ Task will lint the all javascript inside app folder, it also excludes the bower_
 #### Copy assets to build folder
 	
  Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
- is very low level and because of that often painful to use. We use ```fs-jetpack``` module which gives more convenient API to work with file system.  
- Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
+ is very low level and because of that often painful to use. We use ```fs-jetpack``` module, which gives more convenient API to work with file system. Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
 
 **Installation** 
 	{% highlight javascript %}
@@ -202,31 +201,35 @@ Task will lint the all javascript inside app folder, it also excludes the bower_
 	 
 Our copy task will look like:
 
-``` javascript
+{% highlight javascript %}
 var jetpack = require('fs-jetpack'); 
+
 task('copy', function (env) { 
 	util.log('Copying assets...');		
 	var source = jakeConfig.source,
 		dest = jakeConfig.build,
 		filesToInclude = [
-			source + '/**/*.html',
-			 source + '/scripts/**/*.js',
-			 source + '/assets/**/*.css',
-			 source + '/assets/images/**/*' 
+			 source + '/**/*.html',
+			 source + '/**/*.js',
+			 source + '/**/*.css',
+			 source + '/assets/images/**/*',
+			 '!' + source + '/**/*_test.js',
+			 '!'+ source + '/**/*.less'
 		];
 	if(env == 'dist') {
 		source = jakeConfig.build;
 		dest = jakeConfig.dist;
 		filesToInclude = [
 			source + '/assets/*',
-			'*.!(css|js|html)'
+			source + '/**/*.html',
+			'*.!(css|js)'
 		];
 	}
 	jetpack.copy(source, dest, { 
 		matching: filesToInclude
 	});
 });
-```
+{% endhighlight %}
 The copy task will do two tasks. Copy code and assets from source to build and from build to distribution folder. You need to pass the parameter env='list' in order to copy to list folder.
 
 
