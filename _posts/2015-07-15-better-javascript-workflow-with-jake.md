@@ -18,7 +18,7 @@ You can create jake tasks with any valid javascript code.
 
 In this blog post we will use jake to speed up the front end development process. We will look breifely what jake can do, before jumping into real development walk through.
 
-###Setting up
+### Setting up
 In order to start with the jake, you need to have nodejs installed on your machine. If you know nothing about node js, visit the [download]("http:// www.nodejs.com", "Node JS") page and grab the installer for your operating system.Once nodejs installed, run this command in your terminal to install the jake.
 {% highlight javascript %} 
    npm install -g jake
@@ -126,7 +126,7 @@ Jakefile.config.js contains a singleton module which contains list of variables 
  	var jakeConfig = require('./jakefile.config.js');
 {% endhighlight %}
 
-#### Clean previous build
+### Clean previous build
 We need to clean/remove the build artifacts from previous build. ```jake.rmRf()``` is the  utility method which recursively remove the directories and all its content.
 
 {% highlight javascript %}
@@ -140,7 +140,7 @@ task('clean', function() {
 
 This will remove the contents of ```build/``` directory and ```dist/``` directory.
 
-#### Linting JavaScript code with JSHint 
+### Linting JavaScript code with JSHint 
 Linting is the process of analysing code for potential errors whith the use of programs. [JSHint](http://jshint.com/) is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
 directly we  use ```simplebuild-jshint```, library that provides a simple interface to JSHint. Its convenient to use automation tools such as Grunt, Gulp or Jake.
 
@@ -153,7 +153,7 @@ Install JSHint and simplebuild-jshint npm modules using ```npm install``` comman
 
 We need to validate source javascripts with JSHint, also we need to exclude the bower dependencies from validation.
 
-##### JSHint Options
+#### JSHint Options
 JSHint was designed to be very configurable. These configuration options can be found [here](http://jshint.com/docs/options/). Define the JSHint rules in 
 jakeConfig file like following:
 
@@ -189,7 +189,7 @@ Our lint task is as follows:
 
 Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
 
-#### Copy assets to build folder
+### Copy assets to build folder
 	
  Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
  is very low level and because of that often painful to use. We use ```fs-jetpack``` module, which gives more convenient API to work with file system. Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
@@ -233,7 +233,7 @@ task('copy', function (env) {
 The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
 test files and less files.
 
-####Wiredep the  bower dependencies
+### Wiredep the  bower dependencies
 Wiredep is the node module used to wire the bower dependencies to your source code.  
 
 Install module with npm.
@@ -297,22 +297,22 @@ If one of your dependencies does not have main in its bower.json, then you may w
 
 You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
 
-#### Concatenating the Source file 
+### Concatenating the Source file 
 
-#### Minifying the source files
+### Minifying the source files
 
-#### Compiling the less files
+### Compiling the less files
 
-#### Configuring the Staging Server
+### Configuring the Staging Server
 
-#### Watch the filesystem for changes
+### Watch the filesystem for changes
 
-#### Minify HTML files with htmlmin
+### Minify HTML files with htmlmin
 
-#### Minify the css files with CssMin
+### Minify the css files with CssMin
 
-#### Implement the live reload
+### Implement the live reload
 
-#### Wrapping up
+### Wrapping up
 
-#### Summary
+### Summary
