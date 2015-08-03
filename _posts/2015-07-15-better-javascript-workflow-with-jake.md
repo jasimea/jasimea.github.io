@@ -298,12 +298,21 @@ If one of your dependencies does not have main in its bower.json, then you may w
 You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
 
 #### Concatenating the Source file 
+
 #### Minifying the source files
+
 #### Compiling the less files
+
 #### Configuring the Staging Server
+
 #### Watch the filesystem for changes
+
 #### Minify HTML files with htmlmin
+
 #### Minify the css files with CssMin
+
 #### Implement the live reload
+
 #### Wrapping up
+
 #### Summary
