@@ -189,22 +189,21 @@ Our lint task is as follows:
 
 Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
 
-#### Copy assets
-After cleaning the project we need to copy the actual code & assets into the build directory. Node's built in file system api is too low level and too painful to use. So we will use the ```fs-jetpack``` api built on top of native file system API.  Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
+#### Copy assets to build folder
+	
+ Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
+ is very low level and because of that often painful to use. We use ```fs-jetpack``` module which gives more convenient API to work with file system.  
+ Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
 
 **Installation** 
-``` 
-npm install fs-jetpack --save-dev
-``` 
-
-**Usage**
-``` javascript
-var jetpack = require('fs-jetpack');
-```
-
+	{% highlight javascript %}
+ 		npm install fs-jetpack --save-dev
+	{% endhighlight %}
+	 
 Our copy task will look like:
 
-``` javascript 
+``` javascript
+var jetpack = require('fs-jetpack'); 
 task('copy', function (env) { 
 	util.log('Copying assets...');		
 	var source = jakeConfig.source,
