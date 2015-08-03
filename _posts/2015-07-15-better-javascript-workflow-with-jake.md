@@ -237,18 +237,18 @@ test files and less files.
 Wiredep is the node module used to wire the bower dependencies to your source code.  
 
 Install module with npm.
-{ %highlight javascript %}
+{% highlight javascript %}
 	 npm install wiredep --save-dev
 {% endhighlight %}
 
 
-{ %highlight javascript %}
+{% highlight javascript %}
 Install your bower dependencies
 ``` bower install jquery --save ```
 {% endhighlight %}
 
 Insert a placeholder in your app.html where your dependencies will be injected
-{ %highlight html %}
+{% highlight html %}
 	<html>
 		<head>
 			 <!-- bower:css -->
@@ -259,7 +259,7 @@ Insert a placeholder in your app.html where your dependencies will be injected
 			<!-- endbower -->
 		</body>
 	</html>
-{ % endhighlight %}
+{% endhighlight %}
 
 Create the jake task as follows:
 
