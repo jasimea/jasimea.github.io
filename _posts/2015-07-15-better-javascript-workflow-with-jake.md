@@ -173,18 +173,20 @@ Our lint task is as follows:
 {% highlight javascript %}
 	var jshint = require("simplebuild-jshint");
 
-	jshint.checkFiles({
-    	files: [ 
-			"app/*.js", 
-			"app/**/*.js", 
-			'!app/bower_components/**/*.js'
-		],
-    	options: jakeConfig.jsHintOptions
-	}, function() {
-	    console.log("Lint succeeded");
-	}, function(message) {
-	    console.log(message);
-	});
+	task('jshint', function () {
+	    jshint.checkFiles({
+	        files: [
+	            jakeConfig.source + "/**/*.js",
+				"!" + jakeConfig.source +"/**/*_test.js"
+        	],
+        	options: {
+            	curly: true,
+            	quotmark: 'single',
+            	eqeqeq:true
+        	}
+    	}, complete, fail);
+	}, { async: true });
+
 {% endhighlight %}
 
 Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
@@ -219,12 +221,14 @@ Create the jake task as follows:
 {% highlight javascript %} 
 var wiredep = require('wiredep');
 
-task('wiredep',  function() {
-	wiredep({
-		src: 'app/app.html',
-		bowerJson: require('./bower.json'),
+desc('Wiring bower dependencies...');
+task('wiredep', function () {
+	console.log('Wiring bower dependencies...');
+    wiredep({
+        src: 'app/index.html', 
+		bowerJson: require('./bower.json'), 
 		directory: './bower_components'
-	});		
+    });
 });
 {% endhighlight %}
 
@@ -264,43 +268,121 @@ You can read more details about wiredep library [here](https://github.com/taptap
 Our copy task will look like:
 
 {% highlight javascript %}
-var jetpack = require('fs-jetpack'); 
+	var jetpack = require('fs-jetpack'); 
+	function copyAssets(env) {
+		var source = 'app',
+			dest = 'build',
+			filesToInclude = [
+				 '**/*.html',
+				 '**/*.js',
+				 '**/*.css',
+				 'assets/images/**/*',
+				 '!**/*_test.js',
+				 '!**/*.less'
+			];
 
-task('copy', function (env) { 
-	util.log('Copying assets...');		
-	var source = jakeConfig.source,
-		dest = jakeConfig.build,
-		filesToInclude = [
-			 'app/**/*.html',
-			 'app/**/*.js',
-			 'app/**/*.css',
-			 'app/assets/images/**/*',
-			 '!app/**/*_test.js',
-			 '!app/**/*.less'
-		];
-	if(env == 'dist') {
-		source = jakeConfig.build;
-		dest = jakeConfig.dist;
-		filesToInclude = [
-			'build/assets/*',
-			'build/**/*.html',
-			'*.!(css|js)'
-		];
+		if (env == 'dist') {
+			source = 'build';
+			dest = 'dist';
+			filesToInclude = [
+				'build/assets/*',
+				'build/**/*.html',
+				'*.!(css|js)'
+			];
+		}
+
+		jetpack.copy(source, dest, { matching: filesToInclude });
 	}
-	jetpack.copy(source, dest, { 
-		matching: filesToInclude
-	});
-});
+
+task('copy-build', ['clean'], function () { copyAssets(); });
+
+task('copy-dist', function () { copyAssets('dist'); })
+
+
 {% endhighlight %}
 The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
 test files and less files.
 
+### Compiling the less files
+
+{% highlight javascript %}
+	task('less', function () {
+		var list = new jake.FileList();
+		list.include('app/**/!(_)*.less');
+
+		list.forEach(function (file) {
+			var dest = 'build' + file.substring(file.indexOf("/"), file.lastIndexOf('.')) + '.css';
+			console.log('Compiling ' + dest);
+			jake.exec('lessc ' + file + ' > ' + dest, { printStdout: true }, function () {
+				complete();
+			});
+		});
+	}, { async: true });
+{% endhighlight %}
 
 ### Concatenating the Source file 
 
+{% highlight javascript %}
+
+	var uglifyjs = require('uglify-js');
+
+	task('concat', function () {
+		var htmlContent = fs.readFileSync('build/index.html').toString();
+
+		/**
+		 * Concatinating bower dependencies
+		 */
+		var regEx = /(([ \t]*)<!--\s*bower:js\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi;
+		var tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
+    
+		var content = concatTagFiles(tags);
+		jetpack.append('build/vendor.min.js', content);
+
+		htmlContent = htmlContent.replace(regEx, '<script src="vendor.min.js"></script>');
+		/**
+		 * Concatinating app js
+		 */
+
+		regEx = /(([ \t]*)<!--\s*app:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endapp\s*-->)/gi;
+		tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
+
+		content = concatTagFiles(tags);
+		jetpack.append('build/app.min.js', content);
+
+		htmlContent = htmlContent.replace(regEx, '<script src="app.min.js"></script>');
+
+
+		jetpack.write('build/index.html', htmlContent);
+	});
+
+	function concatTagFiles(tags) {
+		var content = "";
+		tags.forEach(function (tag) {
+			var file = tag.toString().match(/src\s*=\s*['"]([^"']+)/)[1];
+			content += jetpack.cwd('app').read(file);
+		});
+		return content;
+	}
+
+{% endhighlight %}
+
 ### Minifying the source files
 
-### Compiling the less files
+{% highlight javascript %}
+	
+	//....
+	task('minify-scripts', function(){
+		var scripts = [
+			'dist/app.min.js',
+			'dist/vendor.min.js',
+		];
+		scripts.forEach(function(file) {
+			var result  = uglifyjs.minify(file);
+			jetpack.write(file, result.code);
+		});	 
+	});
+{% endhighlight %}
+
 
 ### Configuring the Staging Server
 
