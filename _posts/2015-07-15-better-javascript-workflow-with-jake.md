@@ -305,6 +305,13 @@ test files and less files.
 
 ### Compiling the less files
 
+We need to compile less files to standard css files. Less can be used on command line via npm, or  as a script file for runtime 
+compilation inside browser itself, or via wide variety of third party tools. Here we use less via command line. 
+```jake.exec``` command is the best option with jake js for executing the shell commands.
+
+Install less css via npm ``` npm install -g less ```. ***If you don't want to install less as global module,
+then you should change the less command relative to your node_modules folder***.
+
 {% highlight javascript %}
 	task('less', function () {
 		var list = new jake.FileList();
@@ -421,5 +428,22 @@ task('watch', function () {
 {% endhighlight %}
 
 ### Wrapping up
-
+{% highlight javascript %}
+task('build', function () {
+    var tasks = [
+        'clean',
+        'jshint',
+        'wiredep',
+        'copy-build',
+        'less',
+        'concat',
+        'copy-dist',
+        'minify',
+        'cssmin'
+    ];
+    tasks.forEach(function (tsk) {
+        jake.Task[tsk].execute();
+    });
+});
+{% endhighlight %}
 ### Summary
