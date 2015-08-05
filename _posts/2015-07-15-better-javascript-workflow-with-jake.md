@@ -323,6 +323,9 @@ test files and less files.
 ### Concatenating the Source file 
 
 {% highlight javascript %}
+
+	var uglifyjs = require('uglify-js');
+
 	task('concat', function () {
 		var htmlContent = fs.readFileSync('build/index.html').toString();
 
@@ -366,7 +369,7 @@ test files and less files.
 ### Minifying the source files
 
 {% highlight javascript %}
-	var uglifyjs = require('uglify-js');
+	
 	//....
 	task('minify', function () {
 		var scripts = [
@@ -382,9 +385,24 @@ test files and less files.
 
 ### Minify the css files with CssMin
 
+{% highlight javascript %}
+task('cssmin', function () {
+    var css = fs.readFileSync("build/app.css", encoding = 'utf8');
+    fs.writeFileSync('dist/app.css', cssmin(css));
+});
+{% endhighlight %}
+
+
+### Configuring the Staging Server
+{% highlight javascript %}
+task("run", ["build"], function () {
+    jake.exec("node ./node_modules/http-server/bin/http-server " + "build", {
+        interactive: true
+    }, complete);
+}, { async: true });
+{% endhighlight %}
 
 ### Watch the filesystem for changes
-
 {% highlight javascript %}
 task('watch', function () {
     nodemon({
@@ -400,17 +418,6 @@ task('watch', function () {
         console.log("*** Restarting due to", files);
     });
 });
-{% endhighlight %}
-
-
-### Configuring the Staging Server
-
-{% highlight javascript %}
-task("run", ["build"], function () {
-    jake.exec("node ./node_modules/http-server/bin/http-server " + "build", {
-        interactive: true
-    }, complete);
-}, { async: true });
 {% endhighlight %}
 
 ### Wrapping up
