@@ -323,9 +323,6 @@ test files and less files.
 ### Concatenating the Source file 
 
 {% highlight javascript %}
-
-	var uglifyjs = require('uglify-js');
-
 	task('concat', function () {
 		var htmlContent = fs.readFileSync('build/index.html').toString();
 
@@ -369,30 +366,52 @@ test files and less files.
 ### Minifying the source files
 
 {% highlight javascript %}
-	
+	var uglifyjs = require('uglify-js');
 	//....
-	task('minify-scripts', function(){
+	task('minify', function () {
 		var scripts = [
 			'dist/app.min.js',
 			'dist/vendor.min.js',
 		];
-		scripts.forEach(function(file) {
-			var result  = uglifyjs.minify(file);
+		scripts.forEach(function (file) {
+			var result = uglifyjs.minify(file);
 			jetpack.write(file, result.code);
-		});	 
+		});
 	});
+{% endhighlight %}
+
+### Minify the css files with CssMin
+
+
+### Watch the filesystem for changes
+
+{% highlight javascript %}
+task('watch', function () {
+    nodemon({
+        ext: "sh bat json js html css hbs less scss",
+        ignore: ["build", "dist"],
+        exec: "jake",
+        execMap: {
+            sh: "/bin/sh",
+            bat: "cmd.exe /c",
+            cmd: "cmd.exe /c"
+        }
+    }).on("restart", function (files) {
+        console.log("*** Restarting due to", files);
+    });
+});
 {% endhighlight %}
 
 
 ### Configuring the Staging Server
 
-### Watch the filesystem for changes
-
-### Minify HTML files with htmlmin
-
-### Minify the css files with CssMin
-
-### Implement the live reload
+{% highlight javascript %}
+task("run", ["build"], function () {
+    jake.exec("node ./node_modules/http-server/bin/http-server " + "build", {
+        interactive: true
+    }, complete);
+}, { async: true });
+{% endhighlight %}
 
 ### Wrapping up
 
