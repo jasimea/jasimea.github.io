@@ -327,6 +327,9 @@ then you should change the less command relative to your node_modules folder***.
 	}, { async: true });
 {% endhighlight %}
 
+In above code ```jake.FileList``` searches the filesystem and find files into arrray. It takes list of glob-patterns and filenames as parameter, and lazily
+creates a list  of files to include. More on (FileList)(http://jakejs.com/docs#file_list)
+
 ### Concatenating the Source file 
 
 {% highlight javascript %}
