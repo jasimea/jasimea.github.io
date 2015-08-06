@@ -400,23 +400,8 @@ function concatTagFiles(tags) {
 
 {% endhighlight %}
 
-
-### Minifying the source files
-
-{% highlight javascript %}
-	
-	//....
-	task('minify', function () {
-		var scripts = [
-			'dist/app.min.js',
-			'dist/vendor.min.js',
-		];
-		scripts.forEach(function (file) {
-			var result = uglifyjs.minify(file);
-			jetpack.write(file, result.code);
-		});
-	});
-{% endhighlight %}
+***You can use glob patterns combined with ```FileList``` object to combine the file which is much more easier than the above code. It's your choice, and with 
+jake it's always up to you, how the build should work***.  
 
 ### Minify the css files with CssMin
 
