@@ -504,6 +504,6 @@ task('build', [ 'clean', 'jshint', 'wiredep', 'copy-build', 'less', 'concat', 'c
 {% endhighlight %}
 
 It's up to your choice, whether to use Jake over grunt, gulp or any other build libraries. Each of these build tools have their own pros and cons. But jake 
-provides a clean JavaScript syntax which is more readable and easy to maintain, as jake  is not a plugin centric tool, it can be used without any other dependencies on it.
+provides a clean JavaScript syntax which is more readable and easy to maintain. As jake  is not a plugin centric tool, it can even be used without any other dependencies on it.
 
 You can find the full source code here in [Github](http://jasimea.github.io).
