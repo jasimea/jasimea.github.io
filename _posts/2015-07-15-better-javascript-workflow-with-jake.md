@@ -346,11 +346,19 @@ Let's start concatenating the code by placing our script tags into ```grunt-usem
 <!-- endapp -->
 {% endhighlight %}
 
-Jake task ```optimize``` scan both your script tags and bower dependencies from your html files and combine them to a single file in same order that you included in html file.
-   
+The ```optimize``` scan both script tags and bower dependencies from your html files and combine them to a single file in same order that you included in html file.
+It then minifies the concatenated out put using uglify-js module. It also replaces your script tag references with newly created optimized file. 
+
+Install uglify-js:
 
 {% highlight javascript %}
-task('concat', function () {
+npm install uglify-js
+{% endhighlight %} 
+
+Optimize task look like this:
+
+{% highlight javascript %}
+task('optimize', function () {
 	var htmlContent = fs.readFileSync('build/index.html').toString();
 	/**
 	* Concatinating bower dependencies
@@ -359,7 +367,9 @@ task('concat', function () {
 	var tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
     
 	var content = concatTagFiles(tags);
-	jetpack.append('build/vendor.min.js', content);
+	//minifying output
+	var result = uglifyjs.minify(content);
+	jetpack.write('dist/vendor.min.js', result.code);
 
 	htmlContent = htmlContent.replace(regEx, '<script src="vendor.min.js"></script>');
 	/**
@@ -370,11 +380,13 @@ task('concat', function () {
 	tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
 
 	content = concatTagFiles(tags);
-	jetpack.append('build/app.min.js', content);
+	//minifying output
+	result = uglifyjs.minify(content);
+	jetpack.write('dist/app.min.js', result.code);
 
 	htmlContent = htmlContent.replace(regEx, '<script src="app.min.js"></script>');
 
-	jetpack.write('build/index.html', htmlContent);
+	jetpack.write('dist/index.html', htmlContent);
 });
 
 function concatTagFiles(tags) {
@@ -387,6 +399,7 @@ function concatTagFiles(tags) {
 }
 
 {% endhighlight %}
+
 
 ### Minifying the source files
 
