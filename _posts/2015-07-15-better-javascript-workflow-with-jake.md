@@ -346,44 +346,45 @@ Let's start concatenating the code by placing our script tags into ```grunt-usem
 <!-- endapp -->
 {% endhighlight %}
 
+Jake task ```optimize``` scan both your script tags and bower dependencies from your html files and combine them to a single file in same order that you included in html file.
+   
+
 {% highlight javascript %}
-	task('concat', function () {
-		var htmlContent = fs.readFileSync('build/index.html').toString();
-
-		/**
-		 * Concatinating bower dependencies
-		 */
-		var regEx = /(([ \t]*)<!--\s*bower:js\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi;
-		var tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
+task('concat', function () {
+	var htmlContent = fs.readFileSync('build/index.html').toString();
+	/**
+	* Concatinating bower dependencies
+	*/
+	var regEx = /(([ \t]*)<!--\s*bower:js\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi;
+	var tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
     
-		var content = concatTagFiles(tags);
-		jetpack.append('build/vendor.min.js', content);
+	var content = concatTagFiles(tags);
+	jetpack.append('build/vendor.min.js', content);
 
-		htmlContent = htmlContent.replace(regEx, '<script src="vendor.min.js"></script>');
-		/**
-		 * Concatinating app js
-		 */
+	htmlContent = htmlContent.replace(regEx, '<script src="vendor.min.js"></script>');
+	/**
+	* Concatinating app js
+	*/
 
-		regEx = /(([ \t]*)<!--\s*app:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endapp\s*-->)/gi;
-		tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
+	regEx = /(([ \t]*)<!--\s*app:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endapp\s*-->)/gi;
+	tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
 
-		content = concatTagFiles(tags);
-		jetpack.append('build/app.min.js', content);
+	content = concatTagFiles(tags);
+	jetpack.append('build/app.min.js', content);
 
-		htmlContent = htmlContent.replace(regEx, '<script src="app.min.js"></script>');
+	htmlContent = htmlContent.replace(regEx, '<script src="app.min.js"></script>');
 
+	jetpack.write('build/index.html', htmlContent);
+});
 
-		jetpack.write('build/index.html', htmlContent);
+function concatTagFiles(tags) {
+	var content = "";
+	tags.forEach(function (tag) {
+		var file = tag.toString().match(/src\s*=\s*['"]([^"']+)/)[1];
+		content += jetpack.cwd('app').read(file);
 	});
-
-	function concatTagFiles(tags) {
-		var content = "";
-		tags.forEach(function (tag) {
-			var file = tag.toString().match(/src\s*=\s*['"]([^"']+)/)[1];
-			content += jetpack.cwd('app').read(file);
-		});
-		return content;
-	}
+	return content;
+}
 
 {% endhighlight %}
 
