@@ -18,6 +18,7 @@ tasks such as compiling sass files, typescript, coffeescript, etc, concatenate a
 You can create jake tasks with any valid javascript code.
 
 In this blog post we will use jake to speed up the front end development process. We will look breifely what jake can do, before jumping into real development walk through.
+---
 
 ### Setting up
 In order to start with the jake, you need to have nodejs installed on your machine. If you know nothing about node js, visit the [download]("http:// www.nodejs.com", "Node JS") page and grab the installer for your operating system.Once nodejs installed, run this command in your terminal to install the jake.
@@ -26,6 +27,7 @@ In order to start with the jake, you need to have nodejs installed on your machi
 {% endhighlight %}
 -g flag will install the jake glabally. To make sure jake has been installed properly, you can open the command line prompt and type  ``` jake --version ``` and it should output the current version of jake.
 
+---
 
 ### The Jakefile
 Every jake project has a file, ```jakefile.js``` which defines workflow for jake to execute. Jakefile is just executable javascript. You can include whatever the javascript you want in it. A task can be defined using ```task``` function. It has one required argument, the task name, and three optional arguments.
@@ -74,6 +76,8 @@ For example, the ```test``` task from above code sample can be executed as:
 
 If you do not specify a task name, then the default task will be executed.
 
+---
+
 ### Setting up project.
 
 Let's kickstart our app with angular-seed project. I recommend the angular-seed as it provides a great skeleton for bootstrapping. It also contains bunch of development and testing tools. To get started simple clone the angular-seed repository and install the dependencies.
@@ -92,6 +96,8 @@ After installing dependencies, you should find two new folders in your project.
 -  ```app\bower_components ```  - angular js framework files.
 
 Angular-seed is preconfigured with simple webserver. And you can run the application with ```npm start ``` command. But it does not contain automated build system like Jake. 
+
+---
 
 ### Jake In Action
 
