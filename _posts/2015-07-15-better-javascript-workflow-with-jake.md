@@ -332,9 +332,19 @@ creates a list  of files to include. More on [FileList]("http://jakejs.com/docs#
 
 ### Optimizing the application
 
-The best way to optimzie our application is to reduce the number of requests by combining multiple files as few as possible and to reduce the size of files with the help of technique like minification. 
-In this section we will check how we can combine our application source code into a single JavaScript file and also minify files to reduce the file size.
+The best way to optimize our application is to reduce the number of requests by combining multiple files as few as possible and to reduce the size of files with the help of technique like minification. 
+In this section we will check how we can combine our application source code into a single JavaScript file and also minify source files to reduce the size.
 
+Let's start concatenating the code by placing our script tags into ```grunt-usemin``` like block. Change your ```app/index.html``` like following:
+
+{% highlight html %}
+<!-- app:js -->
+<script src="app.js"></script>
+<script src="view1/view1.js"></script>
+<script src="view2/view2.js"></script>
+..
+<!-- endapp -->
+{% endhighlight %}
 
 {% highlight javascript %}
 	task('concat', function () {
