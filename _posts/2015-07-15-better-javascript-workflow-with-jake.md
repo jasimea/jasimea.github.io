@@ -403,15 +403,21 @@ function concatTagFiles(tags) {
 ***You can use glob patterns combined with ```FileList``` object to combine the file which is much more easier than the above code. It's your choice, and with 
 jake it's always up to you, how the build should work***.  
 
-### Minify the css files with CssMin
+In same way you can optimize your css files. There are lots of nodejs modules available for minifying the css files. Here we are  using cssmin. You can install
+cssmin using npm like:
 
+
+{% highlight javascript %}
+npm install -g cssmin
+{% endhighlight %} 
+
+Our css minification task is as simple as follws:
 {% highlight javascript %}
 task('cssmin', function () {
     var css = fs.readFileSync("build/app.css", encoding = 'utf8');
     fs.writeFileSync('dist/app.css', cssmin(css));
 });
 {% endhighlight %}
-
 
 ### Configuring the Staging Server
 {% highlight javascript %}
