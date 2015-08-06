@@ -19,18 +19,21 @@ You can create jake tasks with any valid javascript code.
 
 In this blog post we will use jake to speed up the front end development process. We will look breifely what jake can do, before jumping into real development walk through.
 
+### Setting up
+
 ---
 
-### Setting up
 In order to start with the jake, you need to have nodejs installed on your machine. If you know nothing about node js, visit the [download]("http:// www.nodejs.com", "Node JS") page and grab the installer for your operating system.Once nodejs installed, run this command in your terminal to install the jake.
 {% highlight javascript %} 
    npm install -g jake
 {% endhighlight %}
 -g flag will install the jake glabally. To make sure jake has been installed properly, you can open the command line prompt and type  ``` jake --version ``` and it should output the current version of jake.
 
+### The Jakefile
+
 ---
 
-### The Jakefile
+
 Every jake project has a file, ```jakefile.js``` which defines workflow for jake to execute. Jakefile is just executable javascript. You can include whatever the javascript you want in it. A task can be defined using ```task``` function. It has one required argument, the task name, and three optional arguments.
 
 {% highlight javascript %} 
@@ -77,9 +80,9 @@ For example, the ```test``` task from above code sample can be executed as:
 
 If you do not specify a task name, then the default task will be executed.
 
----
-
 ### Setting up project.
+
+---
 
 Let's kickstart our app with angular-seed project. I recommend the angular-seed as it provides a great skeleton for bootstrapping. It also contains bunch of development and testing tools. To get started simple clone the angular-seed repository and install the dependencies.
 
@@ -98,9 +101,9 @@ After installing dependencies, you should find two new folders in your project.
 
 Angular-seed is preconfigured with simple webserver. And you can run the application with ```npm start ``` command. But it does not contain automated build system like Jake. 
 
----
-
 ### Jake In Action
+
+---
 
 Create a file called ```Jakefile.js``` in your project root directory. This is where you will define and configure tasks that you want jake to run. 
 {% highlight javascript %}
@@ -134,9 +137,10 @@ Jakefile.config.js contains a singleton module which contains list of variables 
  	var jakeConfig = require('./jakefile.config.js');
 {% endhighlight %}
 
+### Clean previous build
+
 ---
 
-### Clean previous build
 We need to clean/remove the build artifacts from previous build. ```jake.rmRf()``` is the  utility method which recursively remove the directories and all its content.
 
 {% highlight javascript %}
@@ -150,9 +154,10 @@ task('clean', function() {
 
 This will remove the contents of ```build/``` directory and ```dist/``` directory.
 
----
+### Linting JavaScript code with JSHint
 
-### Linting JavaScript code with JSHint 
+---
+ 
 Linting is the process of analysing code for potential errors whith the use of programs. [JSHint](http://jshint.com/) is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
 directly we  use ```simplebuild-jshint```, library that provides a simple interface to JSHint. Its convenient to use automation tools such as Grunt, Gulp or Jake.
 
@@ -203,9 +208,9 @@ Our lint task is as follows:
 
 Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
 
----
-
 ### Wiredep the  bower dependencies
+
+---
 
 **After bower packages has been installed**, you could add them manually to your application's HTML file. To avoid this manual intervention, you can use wiredep
 to automate this process. Wiredep enables you to wire Bower dependencies into your source code.
@@ -269,9 +274,9 @@ If one of your dependencies does not have main in its bower.json, then you may w
 
 You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
 
----
-
 ### Copy assets to build folder
+
+---
 	
  Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
  is very low level and because of that often painful to use. We use ```fs-jetpack``` module, which gives more convenient API to work with file system. Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
@@ -318,9 +323,9 @@ task('copy-dist', function () { copyAssets('dist'); })
 The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
 test files and less files.
 
----
-
 ### Compiling the less files
+
+---
 
 We need to compile less files to standard css files. Less can be used on command line via npm, or  as a script file for runtime 
 compilation inside browser itself, or via wide variety of third party tools. Here we use less via command line. 
@@ -347,9 +352,9 @@ then you should change the less command relative to your node_modules folder***.
 In above code ```jake.FileList``` searches the filesystem and find files into arrray. It takes list of glob-patterns and filenames as parameter, and lazily
 creates a list  of files to include. More on [FileList]("http://jakejs.com/docs#file_list").
 
----
-
 ### Optimizing the application
+
+---
 
 The best way to optimize our application is to reduce the number of requests by combining multiple files as few as possible and to reduce the size of files with the help of technique like minification. 
 In this section we will check how we can combine our application source code into a single JavaScript file and also minify source files to reduce the size.
@@ -432,15 +437,21 @@ npm install -g cssmin
 
 Our css minification task is as simple as follws:
 {% highlight javascript %}
+var cssmin = require('cssmin');
 task('cssmin', function () {
     var css = fs.readFileSync("build/app.css", encoding = 'utf8');
     fs.writeFileSync('dist/app.css', cssmin(css));
 });
 {% endhighlight %}
 
----
 
 ### Configuring the Staging Server
+
+---
+
+This task allows you to create a http server. Once run this task, you can access the application on http://localhost:8080. We use ```http-server``` module
+which is very simple and powerful. Install ```http-server```  module via npm.  
+
 {% highlight javascript %}
 task("server", ["build"], function () {
     jake.exec("node ./node_modules/http-server/bin/http-server " + "build", {
@@ -449,15 +460,22 @@ task("server", ["build"], function () {
 }, { async: true });
 {% endhighlight %}
 
+### Watch the filesystem for changes
+
 ---
 
-### Watch the filesystem for changes
+Watch task will watch your app directory, and if any file changes, jake will automatically rerun build task. Install ```nodemon``` module via npm, which will
+monitor for any changes.
+
 {% highlight javascript %}
+
+var nodemon = require('nodemon');
+
 task('watch', function () {
     nodemon({
         ext: "sh bat json js html css hbs less scss",
         ignore: ["build", "dist"],
-        exec: "jake",
+        exec: "jake build",
         execMap: {
             sh: "/bin/sh",
             bat: "cmd.exe /c",
@@ -469,28 +487,23 @@ task('watch', function () {
 });
 {% endhighlight %}
 
+Nodemon accepts several configuration options. ```ext``` says the extensions of files thats should be watched, ```ignore``` is the list directories or files
+to be excluded from watching, and ```exec``` is the command that should be executed when some changes occur in filesystem. You can find more about nodemon [here]("https://github.com/remy/nodemon").  
+
+
+### Wrap up
 ---
 
-### Wrapping up
+Our build task put all the task togethere into one task. You can start building the application with ``` jake watch``` which will call the build task and 
+starts watching application.
+
 {% highlight javascript %}
-task('build', function () {
-    var tasks = [
-        'clean',
-        'jshint',
-        'wiredep',
-        'copy-build',
-        'less',
-        'concat',
-        'copy-dist',
-        'minify',
-        'cssmin'
-    ];
-    tasks.forEach(function (tsk) {
-        jake.Task[tsk].execute();
-    });
+task('build', [ 'clean', 'jshint', 'wiredep', 'copy-build', 'less', 'concat', 'copy-dist', 'minify', 'cssmin'], function () {
+   console.log('Finished building successfully!');
 });
 {% endhighlight %}
 
----
+It's up to your choice, whether to use Jake over grunt, gulp or any other build libraries. Each of these build tools have their own pros and cons. But jake 
+provides a clean JavaScript syntax which is more readable and easy to maintain, as jake  is not a plugin centric tool, it can be used without any other dependencies on it.
 
-### Summary
+You can find the full source code here in [Github](http://jasimea.github.io).
