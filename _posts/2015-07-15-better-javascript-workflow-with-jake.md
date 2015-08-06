@@ -134,6 +134,8 @@ Jakefile.config.js contains a singleton module which contains list of variables 
  	var jakeConfig = require('./jakefile.config.js');
 {% endhighlight %}
 
+---
+
 ### Clean previous build
 We need to clean/remove the build artifacts from previous build. ```jake.rmRf()``` is the  utility method which recursively remove the directories and all its content.
 
@@ -147,6 +149,8 @@ task('clean', function() {
 {% endhighlight %}
 
 This will remove the contents of ```build/``` directory and ```dist/``` directory.
+
+---
 
 ### Linting JavaScript code with JSHint 
 Linting is the process of analysing code for potential errors whith the use of programs. [JSHint](http://jshint.com/) is a static analysis tool for javascript. It analyzes JavaScript source code for common mistakes. Instead of using JSHint 
@@ -198,6 +202,8 @@ Our lint task is as follows:
 {% endhighlight %}
 
 Task will lint the all javascript inside app folder, it also excludes the bower_component folder from liniting.
+
+---
 
 ### Wiredep the  bower dependencies
 
@@ -263,6 +269,8 @@ If one of your dependencies does not have main in its bower.json, then you may w
 
 You can read more details about wiredep library [here](https://github.com/taptapship/wiredep).
 
+---
+
 ### Copy assets to build folder
 	
  Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
@@ -306,10 +314,11 @@ task('copy-build', ['clean'], function () { copyAssets(); });
 
 task('copy-dist', function () { copyAssets('dist'); })
 
-
 {% endhighlight %}
 The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
 test files and less files.
+
+---
 
 ### Compiling the less files
 
@@ -337,6 +346,8 @@ then you should change the less command relative to your node_modules folder***.
 
 In above code ```jake.FileList``` searches the filesystem and find files into arrray. It takes list of glob-patterns and filenames as parameter, and lazily
 creates a list  of files to include. More on [FileList]("http://jakejs.com/docs#file_list").
+
+---
 
 ### Optimizing the application
 
@@ -427,6 +438,8 @@ task('cssmin', function () {
 });
 {% endhighlight %}
 
+---
+
 ### Configuring the Staging Server
 {% highlight javascript %}
 task("server", ["build"], function () {
@@ -435,6 +448,8 @@ task("server", ["build"], function () {
     }, complete);
 }, { async: true });
 {% endhighlight %}
+
+---
 
 ### Watch the filesystem for changes
 {% highlight javascript %}
@@ -453,6 +468,8 @@ task('watch', function () {
     });
 });
 {% endhighlight %}
+
+---
 
 ### Wrapping up
 {% highlight javascript %}
@@ -473,4 +490,7 @@ task('build', function () {
     });
 });
 {% endhighlight %}
+
+---
+
 ### Summary
