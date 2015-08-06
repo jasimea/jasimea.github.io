@@ -18,6 +18,7 @@ tasks such as compiling sass files, typescript, coffeescript, etc, concatenate a
 You can create jake tasks with any valid javascript code.
 
 In this blog post we will use jake to speed up the front end development process. We will look breifely what jake can do, before jumping into real development walk through.
+
 ---
 
 ### Setting up
