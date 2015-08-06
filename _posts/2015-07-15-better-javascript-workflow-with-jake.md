@@ -6,7 +6,8 @@ comments: true
 description: ""
 modified: 2015-07-24
 tags: [javascript, jake, nodejs, build automation]
-
+disqus_shortname: "jasimea"
+disqus_identifier: "0608201501"
 ---
 
 ### Introduction
@@ -421,7 +422,7 @@ task('cssmin', function () {
 
 ### Configuring the Staging Server
 {% highlight javascript %}
-task("run", ["build"], function () {
+task("server", ["build"], function () {
     jake.exec("node ./node_modules/http-server/bin/http-server " + "build", {
         interactive: true
     }, complete);
