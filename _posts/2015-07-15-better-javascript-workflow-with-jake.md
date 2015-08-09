@@ -92,7 +92,11 @@ Let's kickstart our app with angular-seed project. I recommend the angular-seed 
 
 #### Install dependencies
 
-We have two types of dependecies in this project angular framework code and tools which helps to manage and test the application code. Tools can be downloaded via node package manager using the command ``` npm install ```.And angular framework code can be downloaded via ```bower``` using  the command: ``` bower install  ```. Angular team has preconfigured the ```npm`` to automatically install bower dependencies by running ```bower install ```command. So just need to install npm modules only which will install bower modules also.
+We have two types of dependecies in this project angular framework code and tools which helps to manage and test the 
+application code. Tools can be downloaded via node package manager using the command ```npm install```. 
+And angular framework code can be downloaded via ```bower``` using  the command: ``` bower install```. 
+Angular team has preconfigured the ```npm``` to automatically install bower dependencies by running ```bower install```command. 
+So just need to install npm modules only which will install bower modules also.
 
 After installing dependencies, you should find two new folders in your project.
 	
