@@ -278,50 +278,27 @@ You can read more details about wiredep library [here](https://github.com/taptap
 
 ---
 	
- Copy task will copy the assets and source code from source folder to build folder and then to distribution folder. Nod's built in file system api 
- is very low level and because of that often painful to use. We use ```fs-jetpack``` module, which gives more convenient API to work with file system. Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
+ Copy task will copy the assets and source code from source folder to build folder. Node's built in file system api 
+ is very low level and because of that often painful to use. We use ```fs-jetpack``` module, which gives more convenient API to work with file system.
+ Visit [github](https://github.com/szwacz/fs-jetpack)  page for more details.
 
 **Installation** 
-	{% highlight javascript %}
- 		npm install fs-jetpack --save-dev
-	{% endhighlight %}
+{% highlight javascript %}
+npm install fs-jetpack --save-dev
+{% endhighlight %}
 	 
 Our copy task will look like:
 
 {% highlight javascript %}
-	var jetpack = require('fs-jetpack'); 
-	function copyAssets(env) {
-		var source = 'app',
-			dest = 'build',
-			filesToInclude = [
-				 '**/*.html',
-				 '**/*.js',
-				 '**/*.css',
-				 'assets/images/**/*',
-				 '!**/*_test.js',
-				 '!**/*.less'
-			];
-
-		if (env == 'dist') {
-			source = 'build';
-			dest = 'dist';
-			filesToInclude = [
-				'build/assets/*',
-				'build/**/*.html',
-				'*.!(css|js)'
-			];
-		}
-
-		jetpack.copy(source, dest, { matching: filesToInclude });
-	}
-
-task('copy-build', ['clean'], function () { copyAssets(); });
-
-task('copy-dist', function () { copyAssets('dist'); })
+var jetpack = require('fs-jetpack'); 
+task('copy', function () { 
+	var source = 'app', 
+		dest = 'dist',
+		filesToInclude = ['**/*.html', 'assets/*', '*.!(css|js|less)' ];
+	jetpack.copy(source, dest, { matching: filesToInclude });
+});
 
 {% endhighlight %}
-The copy task check the parameter ```env```, if parameter value is ```dist``` then task will copy the assets and code to production dist. This is also exclude the 
-test files and less files.
 
 ### Compiling the less files
 
@@ -340,8 +317,7 @@ then you should change the less command relative to your node_modules folder***.
 		list.include('app/**/!(_)*.less');
 
 		list.forEach(function (file) {
-			var dest = 'build' + file.substring(file.indexOf("/"), file.lastIndexOf('.')) + '.css';
-			console.log('Compiling ' + dest);
+			var dest = file.substring(file.indexOf("/"), file.lastIndexOf('.')) + '.css';
 			jake.exec('lessc ' + file + ' > ' + dest, { printStdout: true }, function () {
 				complete();
 			});
@@ -359,91 +335,53 @@ creates a list  of files to include. More on [FileList]("http://jakejs.com/docs#
 The best way to optimize our application is to reduce the number of requests by combining multiple files as few as possible and to reduce the size of files with the help of technique like minification. 
 In this section we will check how we can combine our application source code into a single JavaScript file and also minify source files to reduce the size.
 
-Let's start concatenating the code by placing our script tags into ```grunt-usemin``` like block. Change your ```app/index.html``` like following:
+Let's optimize our application with usemin-cli, which replaces reference from non-optimized scripts,stylesheet and other assets to their
+optimized version within a set of HTML files.
+
+Usemin blocks can be expressed as following:
+{% highlight html %}
+<!-- build<type>(alternate search path) <path> -->
+... List of script/link tags goes here.
+<!-- endbuild -->
+{% endhighlight %}
+
+Change our app/index.html like s following:
 
 {% highlight html %}
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<!-- endbower -->
+<!-- endbuild -->
+<!-- build:js scripts/app.js -->
 <!-- app:js -->
 <script src="app.js"></script>
 <script src="view1/view1.js"></script>
 <script src="view2/view2.js"></script>
-..
+<script src="components/version/version.js"></script>
+<script src="components/version/version-directive.js"></script>
+<script src="components/version/interpolate-filter.js"></script>
 <!-- endapp -->
+<!-- endbuild -->
 {% endhighlight %}
 
-The ```optimize``` scan both script tags and bower dependencies from your html files and combine them to a single file in same order that you included in html file.
-It then minifies the concatenated out put using uglify-js module. It also replaces your script tag references with newly created optimized file. 
+After running this task, all our bower dependencies will be concatenated and minified into a single file which will be place into scripts/vendor.js in dist
+folder. Also scripts/app.js will contain our application script.
 
-Install uglify-js:
+Install usemin-cli:
 
 {% highlight javascript %}
-npm install uglify-js
+npm install usemin-cli --save
 {% endhighlight %} 
 
 Optimize task look like this:
 
 {% highlight javascript %}
-task('optimize', function () {
-	var htmlContent = fs.readFileSync('build/index.html').toString();
-	/**
-	* Concatinating bower dependencies
-	*/
-	var regEx = /(([ \t]*)<!--\s*bower:js\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi;
-	var tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
-    
-	var content = concatTagFiles(tags);
-	//minifying output
-	var result = uglifyjs.minify(content);
-	jetpack.write('dist/vendor.min.js', result.code);
-
-	htmlContent = htmlContent.replace(regEx, '<script src="vendor.min.js"></script>');
-	/**
-	* Concatinating app js
-	*/
-
-	regEx = /(([ \t]*)<!--\s*app:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endapp\s*-->)/gi;
-	tags = htmlContent.match(regEx).join('').match(/<script.*src=['"]([^'"]+)/gi);
-
-	content = concatTagFiles(tags);
-	//minifying output
-	result = uglifyjs.minify(content);
-	jetpack.write('dist/app.min.js', result.code);
-
-	htmlContent = htmlContent.replace(regEx, '<script src="app.min.js"></script>');
-
-	jetpack.write('dist/index.html', htmlContent);
-});
-
-function concatTagFiles(tags) {
-	var content = "";
-	tags.forEach(function (tag) {
-		var file = tag.toString().match(/src\s*=\s*['"]([^"']+)/)[1];
-		content += jetpack.cwd('app').read(file);
-	});
-	return content;
-}
-
-{% endhighlight %}
-
-***You can use glob patterns combined with ```FileList``` object to combine the file which is much more easier than the above code. It's your choice, and with 
-jake it's always up to you, how the build should work***.  
-
-In same way you can optimize your css files. There are lots of nodejs modules available for minifying the css files. Here we are  using cssmin. You can install
-cssmin using npm like:
-
-
-{% highlight javascript %}
-npm install -g cssmin
-{% endhighlight %} 
-
-Our css minification task is as simple as follws:
-{% highlight javascript %}
-var cssmin = require('cssmin');
-task('cssmin', function () {
-    var css = fs.readFileSync("build/app.css", encoding = 'utf8');
-    fs.writeFileSync('dist/app.css', cssmin(css));
+task('optimize', { async: true }, function () {
+	jake.exec('node ./node_modules/usemin-cli/bin/usemin app/index.html -d dist -o dist/index.html', { stdout: true }, function () {
+        complete();
+    });
 });
 {% endhighlight %}
-
 
 ### Configuring the Staging Server
 
@@ -454,7 +392,7 @@ which is very simple and powerful. Install ```http-server```  module via npm.
 
 {% highlight javascript %}
 task("server", ["build"], function () {
-    jake.exec("node ./node_modules/http-server/bin/http-server " + "build", {
+    jake.exec("node ./node_modules/http-server/bin/http-server " + "dist", {
         interactive: true
     }, complete);
 }, { async: true });
@@ -498,7 +436,7 @@ Our build task put all the task togethere into one task. You can start building 
 starts watching application.
 
 {% highlight javascript %}
-task('build', [ 'clean', 'jshint', 'wiredep', 'copy-build', 'less', 'concat', 'copy-dist', 'minify', 'cssmin'], function () {
+task('build', [ 'clean', 'jshint', 'wiredep', 'copy', 'less', 'optimize'], function () {
    console.log('Finished building successfully!');
 });
 {% endhighlight %}
