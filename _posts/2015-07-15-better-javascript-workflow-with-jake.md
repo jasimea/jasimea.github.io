@@ -118,29 +118,6 @@ Create a file called ```Jakefile.js``` in your project root directory. This is w
 	});
 {% endhighlight %}
 
-It's always a good practice to keep the build configuration separate from actual build file. Create a file called ```Jakefile.config.js``` .
-
-{% highlight javascript %}
-	var Config = (function() {
-		
-		function JakeConfig() {
-			this.source = 'app';
-			this.build = 'build';
-			this.dist = 'dist';
-		}
-		return Config;
-		
-	})();
-	
-	module.exports = new Config();
-{% endhighlight %}
-
-Jakefile.config.js contains a singleton module which contains list of variables like path, jshint options, etc. Import the configuration module int your jake file.
-
-{% highlight javascript %}
- 	var jakeConfig = require('./jakefile.config.js');
-{% endhighlight %}
-
 ### Clean previous build
 
 ---
@@ -151,12 +128,11 @@ We need to clean/remove the build artifacts from previous build. ```jake.rmRf()`
 desc('clean previous build  files');
 task('clean', function() {
 	console.log('cleaning the project....');
-	jake.rmRf(jakeConfig.dist); // directory defined in the config file
-	jake.rmRf(jakeConfig.build);
+	jake.rmRf('dist');
 });
 {% endhighlight %}
 
-This will remove the contents of ```build/``` directory and ```dist/``` directory.
+This will remove the contents of ```dist/``` directory.
 
 ### Linting JavaScript code with JSHint
 
@@ -197,8 +173,9 @@ Our lint task is as follows:
 	task('jshint', function () {
 	    jshint.checkFiles({
 	        files: [
-	            jakeConfig.source + "/**/*.js",
-				"!" + jakeConfig.source +"/**/*_test.js"
+	            "app/**/*.js",
+				"!app/**/*_test.js",
+            	"!app/bower_components/**/*.js"
         	],
         	options: {
             	curly: true,
@@ -216,7 +193,7 @@ Task will lint the all javascript inside app folder, it also excludes the bower_
 
 ---
 
-**After bower packages has been installed**, you could add them manually to your application's HTML file. To avoid this manual intervention, you can use wiredep
+After bower packages has been installed, you could add them manually to your application's HTML file. To avoid this manual intervention, you can use wiredep
 to automate this process. Wiredep enables you to wire Bower dependencies into your source code.
 
 
@@ -381,7 +358,8 @@ Optimize task look like this:
 
 {% highlight javascript %}
 task('optimize', { async: true }, function () {
-	jake.exec('node ./node_modules/usemin-cli/bin/usemin app/index.html -d dist -o dist/index.html', { stdout: true }, function () {
+	jake.exec('node ./node_modules/usemin-cli/bin/usemin app/index.html -d dist -o dist/index.html', 
+	{ stdout: true }, function () {
         complete();
     });
 });
