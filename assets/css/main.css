@@ -1,3 +1,10 @@
+
+@font-face{
+  font-family:'SugarPie';src:url("http://s3.amazonaws.com/hiremyfriend/fonts/27AD03_0_0-daa8532e.eot");
+  src:url("http://s3.amazonaws.com/hiremyfriend/fonts/fonts/27AD03_0_0.eot?#iefix") format("embedded-opentype"),url("http://s3.amazonaws.com/hiremyfriend/fonts/27AD03_0_0-7240ae9f.woff") format("woff"),url("http://s3.amazonaws.com/hiremyfriend/fonts/27AD03_0_0-db516837.ttf") format("truetype");
+}
+
+
 body {
 	font-size: 14px;
     line-height: 20px;
@@ -582,3 +589,4 @@ div.clear {
         display: block !important;
     }
 }
+
