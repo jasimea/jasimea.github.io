@@ -74,9 +74,7 @@ Directly under ```Electron``` folder. Here you can declare dependencies for your
  2. For your appliaction.
 	 ```package.json``` inside  ```Electron/app``` is the real manifest file for your application. Whenever you need to install some npm dependencies to be used in your application directly,  you may add it into this package.json.
 
-Create the above folder structure inside your ExtJs application.
-
-Them format of  ```package.json``` is exactly the same as that of Node's modules.  Your application's startup script should be specified in ```main``` property inside your application ```package.son```.
+Format of  ```package.json``` is exactly the same as that of Node's modules.  Your application's startup script should be specified in ```main``` property inside your application ```package.son```.
 
 ```Electron/app/package.json``` might look like this:
 {% highlight javascript %}
@@ -99,7 +97,7 @@ Then install npm dependencies  need for packaging application by entering follow
 
 > Note:  You should change your current working directory to ```Electron ``` folder in your command line prompt
 
-``` Electron/app/main.js``` is the entry point of our electron application. This script is resposible for creating the  main window and handling the system events.  Copy the code below to ```main.js```:
+``` Electron/app/main.js``` is the entry point of our electron application. This script is responsible for creating the  main window and handling the system events.  Copy the code below to ```main.js```:
 
 {% highlight javascript %}
 // Module to control application life.
@@ -157,14 +155,15 @@ As I mentioned above, Github Electron supports the native  npm modules inside th
 
 We use node.js script for building the application. A typical electron distribution can be found inside ```Electron/node_modules/electron-prebuilt/dist``` directory.   Our build workflow is as follows:
 
-1. Our very first task to do is to copy this distribution into our ```build``` folder inside ```Electron```.
+1. Our very first task to copy this distribution into our ```build``` folder inside ```Electron```.
 
-2.  Each electron distribution contains a default application inside ```dist/resources/default_app``` folder.  We need to replace this application with our ExtJS application.
+2.  Each electron distribution contains a default application inside ```dist/resources/default_app``` folder in windows platform.  We need to replace this application with our ExtJS application.
 
 3.  To protect our application's source code and resources from users, you can choose to package your app into an asar archive with little changes to your source code.  An [asar](https://github.com/atom/asar) archive is a simple tar-like format that concatenate files into a single file, Electron can read arbitrary files from it without unpacking the whole file. 
 4.  Rename the application exe file  and change the icon and other resource files.
 5. Create Installer.
 
+> Note: The steps explained here is for windows platform. In other platforms you should change the path specific to the platform.
 
 Let's start writing our build.js file. Import all required modules as follows:
 {% highlight javascript %}
@@ -494,9 +493,7 @@ module.exports = function () {
 It's a big frustration switching back and forth from sencha command to node js command line each time when we build the application. So we need to integrate this nodejs build in to the sencha command. The current build artifacts should be copied into ```Electron``` directory and ``build.js ``` should be executed whenever you build your extjs application.
 
 
-Whenever you build your application with sencha command, thhe the build.js should be executed.
-
-Sencha command provides lot of extension points where you can  hook your custom ant tasks. Here our task is to copy the current build into workspace/electron/app directory and execute our build.js file.  Paste the code below into to the ```build.xml``` file in your application root.
+Whenever you build your application with sencha command, the the build.js should be executed. For this, Sencha command provides lot of extension points where you can  hook your custom ant tasks. Here our task is to copy the current build into workspace/electron/app directory and execute our build.js file.  Paste the code below into to the ```build.xml``` file in your application root.
 
 {% highlight xml %}
 	 <target name="-after-build">  
